@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 
 const generateToken = require("../util/tokenHelpers").generateToken;
+const restrict = require("../util/tokenHelpers").restrict;
 const Users = require("../user/user-model");
 
 router.post("/api/register", (req, res) => {
@@ -26,7 +27,7 @@ router.post("/api/register", (req, res) => {
         //Create token with user info - Login the user when registering
         const token = generateToken(user);
 
-        res.status(201).json({ username: user.username, token: token });
+        res.status(201).json({ username: user.username, userId: user.id, token: token });
       })
       .catch(error => {
         console.log(error);
@@ -51,7 +52,7 @@ router.post("/api/login", (req, res) => {
         if (user && bcrypt.compareSync(password, user.password)) {
           // Check that password is same as in database
           const token = generateToken(user); // Create token because user is valid
-          res.status(200).json({ username: user.username, token }); // Send token to client
+          res.status(200).json({ username: user.username, userId: user.id, token }); // Send token to client
         } else {
           res.status(400).json({ errorMessage: "Invalid Credentials" });
         }
@@ -62,6 +63,14 @@ router.post("/api/login", (req, res) => {
         });
       });
   }
+});
+
+router.get("/api/user", restrict, (req, res) => {
+  if (req.userInfo) {
+    const { subject, username } = req.userInfo;
+    if (subject && username) res.status(200).json({ userId: subject, username });
+    else res.status(400).json({ errorMessage: "No current user. Please login." });
+  } else res.status(400).json({ errorMessage: "No current user. Please login." });
 });
 
 module.exports = router;
