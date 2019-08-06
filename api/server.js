@@ -17,7 +17,7 @@ server.use(authRouter);
 server.use("/api/reminders", reminderRouter);
 
 server.get("/", (req, res) => {
-  res.json("Welcome to the Best Friend Reminders API");
+  res.json("Welcome to Forget Me Not API");
 });
 
 module.exports = server;

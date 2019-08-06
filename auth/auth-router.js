@@ -8,7 +8,7 @@ const Users = require("../user/user-model");
 router.post("/api/register", (req, res) => {
   const user = req.body;
 
-  if (!user.username || !user.password) {
+  if (!user.username.trim() || !user.password.trim()) {
     res.status(400).json({
       errorMessage: "Please provide a username, and password."
     });
@@ -26,11 +26,12 @@ router.post("/api/register", (req, res) => {
         //Create token with user info - Login the user when registering
         const token = generateToken(user);
 
-        res.status(201).json({ userId: userId, token: token });
+        res.status(201).json({ username: user.username, token: token });
       })
       .catch(error => {
+        console.log(error);
         res.status(500).json({
-          errorMessage: "There was an error saving the new user to the database"
+          errorMessage: "Please provide a different username."
         });
       });
   }
@@ -39,7 +40,7 @@ router.post("/api/register", (req, res) => {
 router.post("/api/login", (req, res) => {
   let { username, password } = req.body;
 
-  if (!username || !password) {
+  if (!username.trim() || !password.trim()) {
     res.status(400).json({
       errorMessage: "Please provide a username, and password."
     });
@@ -50,7 +51,7 @@ router.post("/api/login", (req, res) => {
         if (user && bcrypt.compareSync(password, user.password)) {
           // Check that password is same as in database
           const token = generateToken(user); // Create token because user is valid
-          res.status(200).json({ message: `Welcome ${user.username}!`, token }); // Send token to client
+          res.status(200).json({ username: user.username, token }); // Send token to client
         } else {
           res.status(400).json({ errorMessage: "Invalid Credentials" });
         }

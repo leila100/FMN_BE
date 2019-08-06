@@ -8,10 +8,11 @@ exports.up = function(knex, Promise) {
       .inTable("users");
     tbl.string("recipientName", 128).notNullable();
     tbl.string("recipientEmail", 128).notNullable();
-    tbl.string("message").notNullable();
+    tbl.string("messageText").notNullable();
     tbl.boolean("sent").notNullable();
-    tbl.string("category").notNullable();
-    tbl.date("sendDate").notNullable();
+    tbl.string("type").notNullable();
+    tbl.date("date").notNullable();
+    tbl.date("time").notNullable();
   });
 };
 
