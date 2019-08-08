@@ -27,83 +27,84 @@ router.post("/", restrict, async (req, res) => {
   if (
     !reminder.recipientName ||
     !reminder.recipientEmail ||
-    !reminder.message ||
-    !reminder.category ||
-    !reminder.sendDate
+    !reminder.messageText ||
+    !reminder.type ||
+    !reminder.date
   ) {
     res.status(400).json({
       errorMessage:
-        "Please provide all the required information: recipient name, recipient email, message, category, and the send date"
+        "Please provide all the required information: recipient name, recipient email, message, type, and the send date"
     });
   } else {
     try {
       reminder.sent = false;
       reminder.user_id = userId;
       const reminderId = await Reminder.add(reminder);
+      const newReminder = await Reminder.getById(reminderId, userId);
 
-      const { recipientName, recipientEmail, message } = reminder;
-      let date = reminder.sendDate;
-      if (typeof date === "number" || typeof date === "string") {
-        date = new Date(date);
-      }
-      const year = date.getUTCFullYear();
-      const month = date.getUTCMonth();
-      const day = date.getUTCDate();
-      const sendDate = new Date(year, month, day, 11, 10, 00);
-      try {
-        const user = await Users.findBy({ id: userId }).first();
-        if (!user.name) user.name = "friend";
-        if (!user.email) user.email = "no-email";
-        scheduler.scheduleJob(reminderId.toString(), sendDate, async function() {
-          const request = sg.emptyRequest({
-            method: "POST",
-            path: "/v3/mail/send",
-            body: {
-              personalizations: [
-                {
-                  to: [
-                    {
-                      email: recipientEmail
-                    }
-                  ],
-                  subject: "You have a message from someone who cares!"
-                }
-              ],
-              from: {
-                email: "no-reply@no-reply.com"
-              },
-              content: [
-                {
-                  type: "text/html",
-                  value: `
-                    <h1>Hello ${recipientName}</h1>
-                    <h2>from ${user.name} - ${user.email}</h2>
-                    <p>${message}</p>`
-                }
-              ]
-            }
-          });
-          sg.API(request)
-            .then(response => {
-              console.log(response.statusCode);
-              console.log(response.body);
-              console.log(response.headers);
-            })
-            .catch(error => {
-              console.log(error.response.statusCode);
-            });
+      // const { recipientName, recipientEmail, messageText } = reminder;
+      // let date = reminder.date;
+      // if (typeof date === "number" || typeof date === "string") {
+      //   date = new Date(date);
+      // }
+      // const year = date.getUTCFullYear();
+      // const month = date.getUTCMonth();
+      // const day = date.getUTCDate();
+      // const sendDate = new Date(year, month, day, 11, 10, 00);
+      // try {
+      //   const user = await Users.findBy({ id: userId }).first();
+      //   if (!user.name) user.name = "friend";
+      //   if (!user.email) user.email = "no-email";
+      //   scheduler.scheduleJob(reminderId.toString(), sendDate, async function() {
+      //     const request = sg.emptyRequest({
+      //       method: "POST",
+      //       path: "/v3/mail/send",
+      //       body: {
+      //         personalizations: [
+      //           {
+      //             to: [
+      //               {
+      //                 email: recipientEmail
+      //               }
+      //             ],
+      //             subject: "You have a message from someone who cares!"
+      //           }
+      //         ],
+      //         from: {
+      //           email: "no-reply@no-reply.com"
+      //         },
+      //         content: [
+      //           {
+      //             type: "text/html",
+      //             value: `
+      //               <h1>Hello ${recipientName}</h1>
+      //               <h2>from ${user.name} - ${user.email}</h2>
+      //               <p>${message}</p>`
+      //           }
+      //         ]
+      //       }
+      //     });
+      //     sg.API(request)
+      //       .then(response => {
+      //         console.log(response.statusCode);
+      //         console.log(response.body);
+      //         console.log(response.headers);
+      //       })
+      //       .catch(error => {
+      //         console.log(error.response.statusCode);
+      //       });
 
-          try {
-            await Reminder.update(reminderId, userId, { sent: true });
-          } catch (err) {
-            console.log(err);
-          }
-        });
-      } catch (err) {
-        console.log("ERROR: ", err);
-      }
+      //     try {
+      //       await Reminder.update(reminderId, userId, { sent: true });
+      //     } catch (err) {
+      //       console.log(err);
+      //     }
+      //   });
+      // } catch (err) {
+      //   console.log("ERROR: ", err);
+      // }
 
-      res.status(201).json(reminderId);
+      res.status(201).json(newReminder);
     } catch (err) {
       res.status(500).json({ errorMessage: "There was an error adding the reminder to the database" });
     }
