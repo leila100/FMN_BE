@@ -218,7 +218,7 @@ router.put("/:id", restrict, async (req, res) => {
         res.status(200).json({ count: count, message: "The reminder has been updated" });
       }
     } catch (err) {
-      res.status(500).json({ errorMessage: "There was an error removing the reminder from the database" });
+      res.status(500).json({ errorMessage: "There was an error updating the reminder in the database" });
     }
   }
 });

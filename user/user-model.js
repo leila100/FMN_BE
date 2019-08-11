@@ -2,7 +2,8 @@ const db = require("../data/dbConfig.js");
 
 module.exports = {
   add,
-  findBy
+  findBy,
+  update
 };
 
 async function add(user) {
@@ -12,4 +13,10 @@ async function add(user) {
 
 function findBy(condition) {
   return db("users").where(condition);
+}
+
+function update(id, user) {
+  return db("users")
+    .where("id", id)
+    .update(user);
 }

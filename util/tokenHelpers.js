@@ -10,7 +10,7 @@ module.exports = {
 function generateToken(user) {
   const payload = {
     subject: user.id,
-    username: user.username
+    user: user
   };
   const options = {
     expiresIn: "1d"
