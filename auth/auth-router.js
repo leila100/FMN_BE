@@ -82,11 +82,6 @@ router.put("/api/user/:id", restrict, async (req, res) => {
     });
   } else {
     try {
-      //generate hash from user's password
-      const hash = bcrypt.hashSync(user.password, 10); //2 ^ n times
-      //override use.password with hash
-      user.password = hash;
-
       const count = await Users.update(userId, user);
       if (count === 0) {
         res.status(400).json({
