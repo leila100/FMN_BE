@@ -67,9 +67,21 @@ router.post("/api/login", (req, res) => {
 
 router.get("/api/user", restrict, (req, res) => {
   if (req.userInfo) {
-    const { subject, user } = req.userInfo;
-    if (subject && user) res.status(200).json({ userId: subject, user });
-    else res.status(400).json({ errorMessage: "No current user. Please login." });
+    const { subject } = req.userInfo;
+    // if (subject && user) res.status(200).json({ userId: subject, user });
+    if (subject) {
+      Users.findBy({ id: subject })
+        .first()
+        .then(user => {
+          if (user) res.status(200).json({ userId: subject, user });
+          else res.status(400).json({ errorMessage: "No current user. Please login." });
+        })
+        .catch(error => {
+          res.status(500).json({
+            errorMessage: "There was an error getting current user"
+          });
+        });
+    }
   } else res.status(400).json({ errorMessage: "No current user. Please login." });
 });
 
