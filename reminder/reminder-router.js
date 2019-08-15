@@ -33,7 +33,13 @@ router.post("/", restrict, async (req, res) => {
   ) {
     res.status(400).json({
       errorMessage:
-        "Please provide all the required information: recipient name, recipient email, message, type, and the send date"
+        "Please provide all the required information: recipient name, recipient email, message, type, and the send date" +
+        "you sent:  " +
+        reminder.recipientName +
+        reminder.recipientEmail +
+        reminder.messageText +
+        reminder.type +
+        reminder.date
     });
   } else {
     try {
