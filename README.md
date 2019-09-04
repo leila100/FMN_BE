@@ -82,6 +82,8 @@ Or use an already existing API to get started:
 | ------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST   | /api/register | Creates a `user` sent inside the `body` of the request. **Hashes** password before saving to the database. Returns the id of the new user and a JWT token to be used to access restricted endpoints. |
 | POST   | /api/login    | Uses the credentials sent inside the `body` to authenticate the user. On successful login, creates a JWT token to be used to access restricted endpoints.                                            |
+| GET    | /api/user     | Returns the current user's information |
+| PUT    | /api/user/:id | Updates the current use's information  |
 
 ### REMINDER Endpoints
 
