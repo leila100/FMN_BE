@@ -53,8 +53,8 @@ To run this project, install it locally using yarn:
     $ cd FMN_BE/
     $ yarn install
     $ Setup these environment vaiables:
-    - JWT_SECRET: a secret used to create and verify the authentication token.
-    - DB_ENV: set to production
+      - JWT_SECRET: a secret used to create and verify the authentication token.
+      - DB_ENV: set to production
     $ Locally, use yarn start
     $ In production - add these add-on to Heroku: 
       - Sendgrid, 
