@@ -55,11 +55,11 @@ To run this project, install it locally using yarn:
     $ Setup these environment vaiables:
     - JWT_SECRET: a secret used to create and verify the authentication token.
     - DB_ENV: set to production
-    - In production - Have to add to Heroku these add-on: 
+    $ Locally, use yarn start
+    $ In production - add these add-on to Heroku: 
       - Sendgrid, 
       - New Relic APM (so Heroku doesn't go idle),
       - Postgres
-    $ yarn start
 
 Or use an already existing API to get started:
 
