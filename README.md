@@ -1,7 +1,13 @@
-## Forget Me not API
-This API covers all key use cases related to Forget Me Not. The API uses [Express](https://expressjs.com/) which is a fast, unopinionated, minimalist web framework for Node.js
+## ForgetMeNot API
+<p align="center">
+  <img alt="forget Me Not homepage" src="https://github.com/leila100/forgetMeNot/blob/master/forgetmenot/src/assets/images/logo2.png">
+</p>
 
-Forget Me not's API uses jsonwebtoken in conjunction with bcryptjs to check for a verified and active Token upon logging in for the front end.
+ForgetMeNot is an application that sends thoughtful messages, on your behalf, to people you know on their special day.
+
+This API covers all key use cases related to ForgetMeNot. The API uses [Express](https://expressjs.com/) which is a fast, unopinionated, minimalist web framework for Node.js
+
+ForgetMeNot's API uses jsonwebtoken in conjunction with bcryptjs to check for a verified and active Token upon logging in for the front end.
 
 ## [Lambda Perpetual Access Fund](https://lambdapaf.org/)
 
