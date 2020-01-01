@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const authRouter = require("../auth/auth-router");
 const reminderRouter = require("../reminder/reminder-router");
+const contactRouter = require("../contact/contact-router");
 
 const server = express();
 
@@ -15,6 +16,7 @@ server.use(cors());
 
 server.use(authRouter);
 server.use("/api/reminders", reminderRouter);
+server.use("/api/contacts", contactRouter);
 
 server.get("/", (req, res) => {
   res.json("Welcome to Forget Me Not API");
