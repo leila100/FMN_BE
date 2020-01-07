@@ -2,12 +2,12 @@ const request = require("supertest");
 const bcrypt = require("bcryptjs");
 
 const server = require("../api/server");
-
 const db = require("../data/dbConfig");
 
-afterEach(async () => {
+beforeEach(async () => {
   await db("reminders").truncate(); // reset the database before test
   await db("users").truncate();
+  await db("contacts").truncate();
 });
 
 describe("reminder-router.js", () => {
@@ -63,9 +63,9 @@ describe("reminder-router.js", () => {
       const reminder = {
         recipientName: "Papa",
         recipientEmail: "papa@papa.com",
-        message: "Hello Papa From API",
-        category: "family",
-        sendDate: 1556139895242
+        messageText: "Hello Papa From API",
+        type: "other",
+        date: 1556139895242
       };
 
       const res = await request(server)
@@ -100,10 +100,10 @@ describe("reminder-router.js", () => {
         user_id: response.body.userId,
         recipientName: "Papa",
         recipientEmail: "papa@papa.com",
-        message: "Hello Papa From API",
-        category: "family",
-        sent: false,
-        sendDate: 1556139895242
+        messageText: "Hello Papa From API",
+        type: "other",
+        date: 1556139895242,
+        sent: false
       };
       const reminderId = await db("reminders").insert(reminder);
 
@@ -174,7 +174,7 @@ describe("reminder-router.js", () => {
       const res = await request(server)
         .put("/api/reminders/10")
         .set({ authorization: token })
-        .send({ message: "Changed message!" });
+        .send({ messageText: "Changed message!" });
       expect(res.status).toBe(400);
       expect(res.body.count).toBe(0);
     });
@@ -191,19 +191,20 @@ describe("reminder-router.js", () => {
 
       const reminder = {
         user_id: response.body.userId,
+        user_id: response.body.userId,
         recipientName: "Papa",
         recipientEmail: "papa@papa.com",
-        message: "Hello Papa From API",
-        category: "family",
-        sent: false,
-        sendDate: 1556139895242
+        messageText: "Hello Papa From API",
+        type: "other",
+        date: 1556139895242,
+        sent: false
       };
       const reminderId = await db("reminders").insert(reminder);
 
       const res = await request(server)
         .put(`/api/reminders/${reminderId}`)
         .set({ authorization: token })
-        .send({ message: "Hello Papa from API testing!" });
+        .send({ messageText: "Hello Papa from API testing!" });
       expect(res.status).toBe(200);
       expect(res.body.count).toBe(1);
     });
@@ -246,12 +247,13 @@ describe("reminder-router.js", () => {
 
       const reminder = {
         user_id: response.body.userId,
-        recipientName: "Mama",
-        recipientEmail: "mama@mama.com",
-        message: "Hello Mama From API",
-        category: "family",
-        sent: false,
-        sendDate: 1556139895242
+        user_id: response.body.userId,
+        recipientName: "Papa",
+        recipientEmail: "papa@papa.com",
+        messageText: "Hello Papa From API",
+        type: "other",
+        date: 1556139895242,
+        sent: false
       };
       const reminderId = await db("reminders").insert(reminder);
 
